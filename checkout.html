@@ -423,7 +423,9 @@
                             try {
                                 clearCart();
                                 console.log('Cart cleared. Redirecting to thank-you.html');
-                                window.location.href = 'thank-you.html'; // Redirect to thank you page
+                                // Ensure the path is correct for GitHub Pages
+                                // Use window.location.replace to prevent going back to checkout with back button
+                                window.location.replace('thank-you.html'); 
                             } catch (e) {
                                 console.error('Error during order processing or redirection:', e);
                                 showCustomMessage('An error occurred during your order. Please try again.');
