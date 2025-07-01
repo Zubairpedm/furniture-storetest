@@ -422,10 +422,15 @@
                         setTimeout(() => {
                             try {
                                 clearCart();
-                                console.log('Cart cleared. Redirecting to thank-you.html');
-                                // Ensure the path is correct for GitHub Pages
-                                // Use window.location.replace to prevent going back to checkout with back button
-                                window.location.replace('thank-you.html'); 
+                                console.log('Cart cleared. Attempting redirection to thank-you.html');
+
+                                // Get the base path of the current URL (e.g., /furniture-storetest/)
+                                const currentPath = window.location.pathname;
+                                const basePath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
+                                const redirectUrl = basePath + 'thank-you.html';
+
+                                console.log('Redirecting to:', redirectUrl);
+                                window.location.replace(redirectUrl);
                             } catch (e) {
                                 console.error('Error during order processing or redirection:', e);
                                 showCustomMessage('An error occurred during your order. Please try again.');
