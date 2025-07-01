@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FurnitureCo. - Product Detail</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Import Inter font */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f9fafb; /* Light gray background */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Custom animations */
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+        .animate-slide-up {
+            animation: slideUp 0.8s ease-out forwards;
+            animation-delay: 0.2s;
+            opacity: 0;
+        }
+        .animate-bounce {
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(-5%); animation-timing-function: cubic-bezier(0.8, 0, 1, 1); }
+            50% { transform: translateY(0); animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }
+        }
+
+        /* Custom styles for the message modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            animation: zoomIn 0.3s ease-out;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    <!-- Header -->
+    <header class="bg-gray-800 text-white p-4 shadow-md font-inter rounded-b-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold cursor-pointer">
+                <a href="index.html">FurnitureCo.</a>
+            </h1>
+            <nav class="flex items-center space-x-6">
+                <a href="index.html" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-700 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-1">
+                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" />
+                    </svg> Home
+                </a>
+                <a href="products.html" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-700 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-1">
+                        <line x1="8" x2="21" y1="6" y2="6" /><line x1="8" x2="21" y1="12" y2="12" /><line x1="8" x2="21" y1="18" y2="18" /><line x1="3" x2="3.01" y1="6" y2="6" /><line x1="3" x2="3.01" y1="12" y2="12" /><line x1="3" x2="3.01" y1="18" y2="18" />
+                    </svg> Products
+                </a>
+                <a href="checkout.html" class="relative flex items-center px-3 py-2 rounded-md hover:bg-gray-700 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                        <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                    </svg>
+                    <span id="cart-item-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main id="app-content" class="flex-grow py-8">
+        <!-- Product detail will be loaded here by JavaScript -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white p-6 mt-8 text-center font-inter rounded-t-lg">
+        <div class="container mx-auto">
+            <p>&copy; <span id="current-year"></span> FurnitureCo. All rights reserved.</p>
+            <p class="text-sm mt-2">Designed with care for your home.</p>
+        </div>
+    </footer>
+
+    <!-- Custom Message Modal -->
+    <div id="custom-message-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <p id="modal-message" class="text-lg font-semibold text-gray-800 mb-6"></p>
+            <button id="modal-close-button" class="bg-blue-600 text-white py-2 px-6 rounded-full hover:bg-blue-700 transition-colors duration-200">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- Mock Product Data (Duplicated in each HTML file) ---
+        const products = [
+            {
+                id: 'prod1',
+                name: 'Modern Sofa',
+                price: 799.99,
+                description: 'A comfortable and stylish modern sofa, perfect for any living room. Upholstered in high-quality fabric.',
+                imageUrl: 'https://placehold.co/400x300/F0F0F0/333333?text=Modern+Sofa',
+                category: 'Living Room',
+                dimensions: '80"W x 35"D x 30"H',
+                material: 'Fabric, Wood Frame',
+            },
+            {
+                id: 'prod2',
+                name: 'Dining Table Set',
+                price: 1200.00,
+                description: 'Elegant dining table with four matching chairs, made from solid oak. Ideal for family dinners.',
+                imageUrl: 'https://placehold.co/400x300/F0F0F0/333333?text=Dining+Table',
+                category: 'Dining Room',
+                dimensions: '60"L x 36"W x 30"H',
+                material: 'Solid Oak',
+            },
+            {
+                id: 'prod3',
+                name: 'Queen Bed Frame',
+                price: 550.00,
+                description: 'Sturdy and stylish queen-sized bed frame with a minimalist design. Easy to assemble.',
+                imageUrl: 'https://placehold.co/400x300/F0F0F0/333333?text=Queen+Bed',
+                category: 'Bedroom',
+                dimensions: '85"L x 62"W x 45"H',
+                material: 'Metal, Wood Slats',
+            },
+            {
+                id: 'prod4',
+                name: 'Ergonomic Office Chair',
+                price: 299.99,
+                description: 'High-back ergonomic office chair with adjustable lumbar support and armrests. Perfect for long work hours.',
+                imageUrl: 'https://placehold.co/400x300/F0F0F0/333333?text=Office+Chair',
+                category: 'Office',
+                dimensions: '26"W x 26"D x 48"H (adjustable)',
+                material: 'Mesh, Steel Base',
+            },
+            {
+                id: 'prod5',
+                name: 'Bookshelf',
+                price: 180.00,
+                description: 'Five-tier bookshelf with a contemporary design. Great for organizing books and decor.',
+                imageUrl: 'https://placehold.co/400x300/F0F0F0/333333?text=Bookshelf',
+                category: 'Living Room',
+                dimensions: '30"W x 12"D x 70"H',
+                material: 'Engineered Wood',
+            },
+            {
+                id: 'prod6',
+                name: 'Coffee Table',
+                price: 250.00,
+                description: 'Sleek glass top coffee table with a metal frame. Adds a modern touch to your living space.',
+                imageUrl: 'https://placehold.co/400x300/F0F0F0/333333?text=Coffee+Table',
+                category: 'Living Room',
+                dimensions: '40"L x 20"W x 18"H',
+                material: 'Tempered Glass, Steel',
+            },
+        ];
+
+        // --- Cart Management with localStorage (Duplicated in each HTML file) ---
+        const CART_STORAGE_KEY = 'furnitureCoCart';
+
+        function loadCartItems() {
+            try {
+                const storedCart = localStorage.getItem(CART_STORAGE_KEY);
+                return storedCart ? JSON.parse(storedCart) : [];
+            } catch (e) {
+                console.error("Error loading cart from localStorage:", e);
+                return [];
+            }
+        }
+
+        function saveCartItems(items) {
+            try {
+                localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+            } catch (e) {
+                console.error("Error saving cart to localStorage:", e);
+            }
+        }
+
+        let cartItems = loadCartItems();
+
+        function showCustomMessage(message) {
+            const modalOverlay = document.getElementById('custom-message-modal');
+            const modalMessage = document.getElementById('modal-message');
+            const modalCloseButton = document.getElementById('modal-close-button');
+
+            if (modalOverlay && modalMessage && modalCloseButton) {
+                modalMessage.textContent = message;
+                modalOverlay.classList.remove('hidden');
+
+                const closeHandler = () => {
+                    modalOverlay.classList.add('hidden');
+                    modalCloseButton.removeEventListener('click', closeHandler);
+                };
+                modalCloseButton.addEventListener('click', closeHandler);
+            } else {
+                console.warn("Custom message modal elements not found. Displaying via console:", message);
+            }
+        }
+
+        function updateCartCountDisplay() {
+            const cartItemCountSpan = document.getElementById('cart-item-count');
+            if (cartItemCountSpan) {
+                const totalCount = cartItems.reduce((count, item) => count + item.quantity, 0);
+                cartItemCountSpan.textContent = totalCount;
+                if (totalCount > 0) {
+                    cartItemCountSpan.classList.remove('hidden');
+                } else {
+                    cartItemCountSpan.classList.add('hidden');
+                }
+            }
+        }
+
+        function getProductById(productId) {
+            return products.find(p => p.id === productId);
+        }
+
+        function addToCart(product, quantity = 1) {
+            const existingItemIndex = cartItems.findIndex((item) => item.id === product.id);
+            if (existingItemIndex > -1) {
+                cartItems[existingItemIndex].quantity += quantity;
+            } else {
+                cartItems.push({ ...product, quantity });
+            }
+            saveCartItems(cartItems);
+            updateCartCountDisplay();
+            showCustomMessage(`${product.name} added to cart!`);
+        }
+
+        // --- Page Specific Logic for Product Detail Page ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set current year in footer
+            const currentYearSpan = document.getElementById('current-year');
+            if (currentYearSpan) {
+                currentYearSpan.textContent = new Date().getFullYear();
+            }
+            updateCartCountDisplay();
+
+            const appContent = document.getElementById('app-content');
+
+            // Get product ID from URL query parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+
+            const product = getProductById(productId);
+
+            if (!product) {
+                appContent.innerHTML = `
+                    <div class="container mx-auto p-6 text-center text-red-600 font-inter">
+                        Product not found.
+                        <a href="products.html" class="mt-4 bg-gray-200 text-gray-800 py-2 px-4 rounded-full hover:bg-gray-300 transition-colors duration-200">
+                            Back to Products
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            appContent.innerHTML = `
+                <div class="container mx-auto p-6 font-inter">
+                    <div class="bg-white rounded-xl shadow-lg p-8 flex flex-col md:flex-row items-center md:items-start gap-8">
+                        <div class="md:w-1/2 w-full">
+                            <img src="${product.imageUrl}" alt="${product.name}" class="w-full h-auto rounded-lg shadow-md max-h-96 object-contain" onerror="this.onerror=null;this.src='https://placehold.co/600x450/F0F0F0/333333?text=${encodeURIComponent(product.name)}';" />
+                        </div>
+                        <div class="md:w-1/2 w-full">
+                            <h2 class="text-4xl font-bold text-gray-900 mb-4">${product.name}</h2>
+                            <p class="text-gray-700 text-lg mb-6 leading-relaxed">${product.description}</p>
+                            <div class="mb-6">
+                                <p class="text-gray-600 text-sm">
+                                    <strong class="text-gray-800">Category:</strong> ${product.category}
+                                </p>
+                                <p class="text-gray-600 text-sm">
+                                    <strong class="text-gray-800">Dimensions:</strong> ${product.dimensions}
+                                </p>
+                                <p class="text-gray-600 text-sm">
+                                    <strong class="text-gray-800">Material:</strong> ${product.material}
+                                </p>
+                            </div>
+                            <p class="text-5xl font-extrabold text-blue-600 mb-8">$${product.price.toFixed(2)}</p>
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <button id="add-to-cart-btn" class="flex-1 bg-blue-600 text-white font-semibold py-3 px-6 rounded-full shadow-lg hover:bg-blue-700 hover:scale-105 transition-all duration-300 transform">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block w-5 h-5 mr-2">
+                                        <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                                    </svg> Add to Cart
+                                </button>
+                                <a href="products.html" class="flex-1 bg-gray-200 text-gray-800 font-semibold py-3 px-6 rounded-full shadow-md hover:bg-gray-300 hover:scale-105 transition-all duration-300 transform text-center">
+                                    Back to Products
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Attach event listeners
+            document.getElementById('add-to-cart-btn').addEventListener('click', () => addToCart(product));
+        });
+    </script>
+</body>
+</html>
